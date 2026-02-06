@@ -1,0 +1,42 @@
+### Reference file
+
+
+@startuml
+actor "Registered User" as User
+participant "System" as Sys
+
+activate User
+
+== Initiate logout ==
+User -> Sys: click_on(logout)
+activate Sys
+
+Sys --> User: show(confirm_logout_dialog)
+
+== User decision ==
+
+alt user_cancels_logout (E2)
+    User -> Sys: cancel_logout()
+    Sys --> User: redirect_to(home_page)
+    deactivate Sys
+else else
+    User -> Sys: confirm_logout(user_id)
+
+    == Terminate session ==
+    Sys -> Sys: revoke_session_credentials(user_id)
+    Sys -> Sys: clear_session_related_data(user_id)
+
+    alt error_terminating_session (E1)
+        loop while_not_logged_out
+           Sys -> Sys: revoke_session_credentials(user_id)
+           Sys -> Sys: clear_session_related_data(user_id)
+        end
+    end
+
+    Sys --> User: redirect_to(login_page)
+    deactivate Sys
+end
+
+deactivate User
+
+@enduml

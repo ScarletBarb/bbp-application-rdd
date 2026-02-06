@@ -1,0 +1,40 @@
+@startuml
+
+participant MobileApp as M
+participant APIGateway as API 
+participant PathService as PS
+participant PathDB as PDB
+
+activate M
+M -> M: showManualPathForm()
+alt user_deletes_entry
+M -> M: discardManualPathFrom()
+M -> M: show(manual_path_discarted()
+else user_saves_and_publishes
+M -> M: validate_form_input(path_info)
+alt missing_information
+M -> M: showError(missing_path_info)
+else else 
+M -> API: createManualPath(path_info)
+activate API
+API -> PS: createManualPath(path_info)
+activate PS
+PS -> PDB: insertPath(path_info)
+activate PDB
+alt error_saving_data
+PDB --> PS: ERROR
+loop while_not_saved
+PS -> PDB: insertPath(path_info)
+end
+end
+PDB --> PS: OK
+deactivate PDB
+PS --> API: OK
+deactivate PS
+API --> M: OK
+deactivate API
+M -> M: show(path_created)
+end
+end
+deactivate M
+@enduml

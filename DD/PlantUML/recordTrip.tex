@@ -1,0 +1,49 @@
+@startuml
+
+participant MobileApp as M
+participant APIGateway as API
+participant TripService as TS
+participant TripDB as TDB
+
+activate M
+M -> M: startTripRecording()
+loop while_trip_active
+M -> M: collectSensorData()
+alt trip_paused
+M -> M: pauseTripRecording()
+else trip_resumed
+M -> M: resumeTripRecording()
+end
+end
+M -> M: stopTripRecording()
+M -> API: createTrip(trip_data)
+activate API
+API -> TS: createTrip(trip_data)
+activate TS
+TS -> TS: computeTripMetrics(trip_data)
+TS -> TDB: insert(trip_metrics)
+activate TDB
+alt error_saving_data
+TDB --> TS: ERROR
+loop while_not_saved
+TS -> TDB: insert(trip_metrics)
+end
+TDB --> TS: TRIP_ID
+else else 
+TDB --> TS: TRIP_ID
+deactivate TDB
+end
+TS -> TS: createWeatherJob(TRIP_ID)
+TS --> API: TRIP_METRICS
+deactivate TS
+API --> M: TRIP_METRICS
+deactivate API
+M -> M: show(TRIP_METRICS)
+
+... if application_crashes_during_recording ...
+M -> M: pause_recording()
+M -> M: reopen()
+M -> M: show(prompt_save_or_restart_recording)
+deactivate M
+
+@enduml

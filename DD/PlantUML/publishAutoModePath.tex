@@ -1,0 +1,60 @@
+@startuml
+
+participant MobileApp as M
+participant APIGateway as API 
+participant PathService as PS
+participant PathDB as PDB
+
+activate M
+M -> M: navigateTo(recorded_path_detail)
+M -> API: getPath(path_id)
+activate API
+API -> PS: getPath(path_id)
+activate PS
+PS -> PDB: getPath(path_id)
+activate PDB
+PDB --> PS: PATH_INFO
+deactivate PDB
+PS --> API: PATH_INFO
+deactivate PS
+API --> M: PATH_INFO
+deactivate API
+M->M: showReviewFrom(PATH_INFO)
+... user_reviews_information ... 
+alt user_deletes_recording
+M->API: deletePath(path_id)
+activate API
+API -> PS: deletePath(path_id)
+activate PS
+PS -> PDB: deletePath(path_id)
+activate PDB
+PDB --> PS: OK
+deactivate PDB
+PS --> API: OK
+deactivate PS
+API --> M: OK
+deactivate API
+M->M: showNotification(path_deleted)
+else user_saves_and_publishes
+M -> API: verifyPublishAutoModePath(path_id, revised_path_data)
+activate API
+API -> PS: verifyPublishAutoModePath(path_id, revised_path_data)
+activate PS
+PS -> PDB: updatePath(path_id, revised_path_data)
+activate PDB
+alt error_saving_data
+PDB --> PS: ERROR
+loop while_not_saved
+PS -> PDB: updatePath(path_id, revised_path_data)
+end
+end
+PDB --> PS: OK
+deactivate PDB
+PS --> API: OK
+deactivate PS
+API --> M: OK
+deactivate API
+M -> M: show(path_verifiedPublished)
+end
+deactivate M
+@enduml

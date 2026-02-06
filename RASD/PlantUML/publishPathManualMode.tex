@@ -1,0 +1,53 @@
+### Reference file
+
+
+@startuml
+actor "Registered User" as User
+participant "System" as Sys
+
+activate User
+
+
+== Navigate to manual path recording ==
+User -> User: click_on(track_your_path | track_nav_button)
+
+User -> Sys: get(manual_path_form_page)
+activate Sys
+Sys --> User: show(manual_path_form_prompt)
+deactivate Sys
+
+== Fill manual path form ==
+User -> User: fill(manual_path_form(streets, intersections, road_status, issues))
+
+alt user_deletes_entry_before_save (E3)  
+    User -> Sys: click_on(delete_entry)
+    activate Sys
+    Sys --> User: notify(path_entry_discarded)
+    deactivate Sys
+else user_saves_and_publishes
+    User -> User: click_on(save_and_publish)
+
+    User -> Sys: submit(path_information)
+    activate Sys
+
+    == Validate mandatory data ==
+    Sys -> Sys: validate(path_information)
+    alt mandatory_data_missing (E1)
+        Sys --> User: show(message_missing_information)
+        deactivate Sys
+    else else
+        == Save path ==
+        Sys -> Sys: save_path(path_information)
+        alt error_saving_data (E2)
+            loop while_not_saved
+               Sys -> Sys: save_path(path_information)
+            end
+        end
+        Sys --> User: notify(path_published)
+        deactivate Sys
+    end
+end
+
+deactivate User
+
+@enduml

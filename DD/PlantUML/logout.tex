@@ -1,0 +1,26 @@
+@startuml
+
+participant MobileApp as M
+participant IdP
+
+activate M
+M -> M: showLogout()
+alt user_cancels_logout
+M -> M: navigateTo(homePage)
+else else
+M -> IdP: logout(user_id)
+activate IdP
+alt error_terminating_session
+IdP --> M: ERROR
+loop while_not_logged_out
+M -> IdP: logout(user_id)
+end
+end
+IdP --> M: SESSION_TERMINATED
+deactivate IdP
+M -> M: eraseLocalSessionCredentials()
+M -> M: navigateTo(loginPage)
+end
+deactivate M
+
+@enduml

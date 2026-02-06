@@ -1,0 +1,97 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+' Base and derived users
+abstract class User
+
+class RegisteredUser {
+  +email : String
+  +password: String
+  +username : String
+}
+
+class UnregisteredUser
+
+User <|-- RegisteredUser
+User <|-- UnregisteredUser
+
+' Trip
+class Trip {
+  +id : String
+  +startTimestamp : Timestamp
+  +endTimestamp : Timestamp
+  +totalTime : Integer
+  +totalDistance : Float
+  +avgSpeed : Float
+  +temperature : Float
+  +weatherStatus : String
+  +windSpeed : Float
+  +latitudeList : List<Float>
+  +longitudeList : List<Float>
+}
+
+RegisteredUser "0..1" -left- "0..*" Trip: records >
+
+' Path
+class Path {
+  +id : String
+  +startingPoint : Intersection
+  +finishingPoint : Intersection
+  +score : Float
+  +verified : Boolean
+  +published : Boolean
+}
+
+RegisteredUser "0..1" -down- "0..*" Path: records >
+
+' Intersection
+class Intersection {
+  +id : String
+  +name : String
+  +city : String
+  +country : String
+  +lastUpdated : Timestamp
+  +latitude : Float
+  +longitude : Float
+}
+
+' Road
+class Road {
+  +id : String
+  +name : String
+  +length : Float
+  +surfaceType : String
+  +speedLimit : Integer
+  +bikeLanePresent : Boolean
+  +score : Float
+  +lastUpdated : Timestamp
+}
+
+' Status
+class Status {
+  +id : String
+  +statusType : StatusType
+  +observations: String
+  +timeStamp : Timestamp
+}
+
+' Status enum
+enum StatusType {
+optimal
+medium
+sufficient
+requires_maintenance
+closed
+}
+
+
+' Relationships between Path, Road and Intersection
+Path "2..*" -- "1..*" Road: has >
+Intersection "0..*" -- "1..*" Road: connects 
+Path "2..*" -left- "0..*" Intersection: has >
+
+' Relationship between Road and Status
+Road "0..*" -- "1" Status: has >
+Status .right.> StatusType
+
+@enduml

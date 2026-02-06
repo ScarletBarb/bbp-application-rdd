@@ -1,0 +1,47 @@
+@startuml
+
+participant MobileApp as M
+participant APIGateway as API 
+participant PathService as PS
+participant PathDB as PDB
+
+activate M
+M -> M: bikeRidingDetected()
+M -> M: startAutomatedPathRecording()
+loop while_recording
+alt user_stops_biking
+M -> M: stopAutomatedPathRecording()
+else sensor_error
+M -> M: stopAutomatedPathRecording()
+M -> M: showError(sensor_error)
+else application_crash
+M -> M: stopAutomatedPathRecording()
+M -> M: reopen()
+else else
+M -> M: recordAutomatedPathData(sensor_data)
+alt obstacle_detected
+M -> M: saveObstacle(sensor_data)
+end
+end
+end
+M -> API: createAutomatedPath(path_data)
+activate API
+API -> PS: createAutomatedPath(path_data)
+activate PS
+PS -> PDB: insertUnverifiedPath(path_data)
+activate PDB
+alt error_saving_data
+PDB --> PS: ERROR
+loop while_not_saved
+PS -> PDB: insertUnverifiedPath(path_data)
+end
+end
+PDB --> PS: OK
+deactivate PDB
+PS --> API: PATH_READY_TO_REVIEW
+deactivate PS
+API --> M: PATH_READY_TO_REVIEW
+deactivate API
+M -> M: showNotification(PATH_READY_TO_REVIEW)
+deactivate M
+@enduml

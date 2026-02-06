@@ -1,0 +1,93 @@
+### Reference file
+
+@startuml
+actor "Registered User" as User
+participant "System" as Sys
+
+activate User
+
+== Open registered trips section ==
+User -> User: click_on(track_your_path | your_trips_nav)
+
+User -> Sys: get(registered_trips_page)
+activate Sys
+Sys --> User: show(registered_trips_page)
+deactivate Sys
+
+== Start new activity ==
+User -> User: click_on(new_activity)
+
+User -> Sys: get(new_activity_page)
+activate Sys
+Sys --> User: show(new_activity_page_prompt_start)
+deactivate Sys
+
+== Start recording ==
+User -> User: click_on(start_recording)
+
+User -> Sys: request_start_recording()
+activate Sys
+
+Sys -> Sys: check_permissions(gps, sensors, background)
+alt permissions_not_granted (E4)
+    Sys -> User: show(prompt_request_permissions)
+    User --> Sys: grant | deny
+    alt user_denies_permissions
+       Sys -> Sys: deactivate(automated_mode)
+       Sys --> User: show(error_access_denied_sensors)
+    else else
+       Sys -> Sys: access_sensors()
+    end
+else else
+    Sys -> Sys: start_trip_recording()
+    Sys -> Sys: collect_data(gps_location, accelerometer, gyroscope)
+    alt sensor_unavailable (E1)
+        Sys --> User: show(error_sensor_unavailable)
+    else else
+        Sys --> User: show(recording_in_progress_ui)
+    end
+end
+
+== Pause / resume (optional) ==
+loop while_trip_active
+    User -> User: click_on(pause | resume)
+    User -> Sys: toggle_recording_state()
+    alt trip_paused
+       Sys -> Sys: resume_trip_recording()
+       Sys --> User: show(trip_resumed)
+    else else 
+       Sys -> Sys: pause_trip_recording()
+       Sys --> User: show(trip_paused)
+    end
+end
+
+== Stop recording ==
+User -> User: click_on(stop_recording)
+
+User -> Sys: request_stop_recording()
+Sys -> Sys: stop_trip_recording()
+Sys -> Sys: compute_metrics()
+
+== Save trip ==
+Sys -> Sys: save_trip_with_metrics()
+alt error_saving_data (E2)
+    loop while_not_saved
+       Sys -> Sys: save_trip_with_metrics()
+       Sys --> User: show(error_save_failed)
+    end
+    
+else else
+    Sys --> User: show(trip_summary)
+end
+deactivate Sys
+
+== Crash handling ==
+... if application_crashes_during_recording (E3) ...
+Sys -> Sys: pause_recording()
+User -> Sys: reopen_application()
+Sys --> User: show(prompt_save_or_restart_recording)
+
+deactivate Sys
+deactivate User
+
+@enduml

@@ -1,0 +1,42 @@
+### Reference file
+
+@startuml
+actor "Registered User" as User
+participant "System" as Sys
+
+activate User
+
+== Open registered trips section ==
+User -> User: click_on(explore_registered_trips | your_trips_nav)
+
+User -> Sys: get(trips_page)
+activate Sys
+
+Sys -> Sys: get_trips(user_id)
+
+alt no_registered_trip_for_user (E1)
+    Sys --> User: show(empty_trips_page)
+    deactivate Sys
+else else
+    Sys --> User: show(trips)
+    deactivate Sys
+
+    == Select trip ==
+    User -> User: click_on(selected_trip)
+
+    User -> Sys: get(trip_detail_page(trip_id))
+    activate Sys
+
+    Sys -> Sys: get_trip(trip_id)
+
+    alt error_fetching_trip_information (E2)
+        Sys --> User: show(error_fetching_data)
+    else else
+        Sys --> User: show(trip_detail)
+    end
+    deactivate Sys
+end
+
+deactivate User
+
+@enduml

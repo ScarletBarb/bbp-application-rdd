@@ -1,0 +1,35 @@
+@startuml
+
+participant TripService as TS
+participant TripDB as TDB
+participant WeatherAPI as W
+
+activate TS
+TS -> TS: getWeatherJobs()
+loop for_each_job
+TS -> W: ping()
+activate W
+alt api_not_available
+TS -> TS: scheduleJobLater(trip_id)
+else else 
+W --> TS: PONG
+TS -> W: getWeather(trip.timestamp, trip.location)
+alt weather_data_not_available
+W --> TS: NO_DATA
+TS -> TDB: uptadeTrip(trip_id, weather_data_not_available)
+activate TDB
+TDB --> TS: OK
+deactivate TDB
+else else 
+W --> TS: WEATHER DATA
+deactivate W
+TS -> TDB: uptadeTrip(trip_id, WEATHER DATA)
+activate TDB
+TDB --> TS: OK
+deactivate TDB
+end
+end
+end
+deactivate TS
+
+@enduml

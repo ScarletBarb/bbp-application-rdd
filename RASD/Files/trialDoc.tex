@@ -1,0 +1,91 @@
+% This is a complete, runnable LaTeX document.
+\documentclass[11pt, a4paper]{article}
+
+% --- PACKAGES ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry} % Sets nice 1-inch margins
+\usepackage{listings}             % The main package for typesetting code
+\usepackage{xcolor}               % Required for defining custom colors
+\usepackage{caption}              % Allows captions for listings
+\usepackage{wrapfig}              % Allows figure wrapping
+
+% --- CUSTOM COLOR DEFINITIONS ---
+% We define some colors for our syntax highlighting
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codeblue}{rgb}{0,0,0.6}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{backcolour}{rgb}{0.98,0.98,0.98}
+
+% --- LISTINGS STYLE FOR ALLOY ---
+% We define a new style called "alloy"
+\lstdefinestyle{alloy}{
+    backgroundcolor=\color{backcolour},   % Set a light gray background
+    commentstyle=\color{codegreen},       % Set comment color
+    keywordstyle=\color{codeblue},        % Set keyword color
+    basicstyle=\ttfamily\small,          % Use a small, monospaced font
+    breakatwhitespace=false,             % Don't break lines only at whitespace
+    breaklines=true,                     % Automatically break long lines
+    captionpos=b,                        % Put captions at the bottom
+    frame=single,                        % Draw a single frame around the code
+    keepspaces=true,                     % Keep spaces to preserve indentation
+    numbers=left,                        % Add line numbers on the left
+    numberstyle=\tiny\color{codegray},   % Style for line numbers
+    showspaces=false,                    % Don't show spaces as '␣'
+    showstringspaces=false,              % Don't show spaces in strings
+    showtabs=false,                      % Don't show tabs
+
+    % --- Alloy Specifics ---
+    morecomment=[l]{//},                 % Define '//' as a single-line comment
+    morecomment=[s]{/*}{*/},             % Define '/*' and '*/' as block comments
+    morekeywords={
+        abstract, sig, extends,    % Signatures
+        one, lone, some, set,      % Multiplicities
+        fact, all, no, in, not,    % Logic and facts
+        pred, fun, run, check, for % Commands
+    }
+}
+
+% --- DOCUMENT START ---
+\begin{document}
+
+\title{Typesetting Alloy Code in \LaTeX}
+\author{A \LaTeX{} Example}
+\date{}
+\maketitle
+
+Here is a simple example of an Alloy model. We use the \texttt{listings} package to format the code, which includes highlighting for both single-line (\texttt{//}) and block-style (\texttt{/* ... */}) comments, as well as keywords.
+
+% We call the 'lstlisting' environment and tell it to use our 'alloy' style
+\begin{lstlisting}[
+    language=Alloy, % This is not a real language, but applies our style
+    style=alloy,
+    caption={A simple Alloy model of a file system.},
+    label={lst:filesystem}
+]
+/*
+ * This is a block comment.
+ * This model describes a basic file system.
+ */
+abstract sig FSObject {} // An abstract filesystem object
+
+// A File is a type of FSObject
+sig File extends FSObject {}
+
+// A Directory is also an FSObject
+sig Dir extends FSObject {
+    contents: set FSObject // A directory contains a set of FSObjects
+}
+
+// A fact to prevent a directory from containing itself (no loops)
+fact NoSelfContainment {
+    all d: Dir | d not in d.^contents
+}
+
+// Run the model to find an instance
+run {} for 3
+\end{lstlisting}
+
+We can easily reference our code, for example, in Listing~\ref{lst:filesystem}. This shows how to define signatures like \texttt{File} and \texttt{Dir}, and how to write a \texttt{fact} that applies to the model.
+
+\end{document}

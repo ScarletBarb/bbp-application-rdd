@@ -1,0 +1,18 @@
+@startuml
+
+participant MobileApp as M
+
+activate M
+
+alt trip_or_path_recording_in_progress
+M -> M: stopRecordingTrip() | stopRecordingPath()
+end
+alt sensor_error
+M -> M: showError(sensor_error)
+else else 
+M -> M: deactivateAutomatedMode()
+M -> M: show(automatic_mode_disabled)
+end
+
+deactivate M
+@enduml

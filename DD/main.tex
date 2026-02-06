@@ -1,0 +1,115 @@
+\input{DD/commandsFile}
+\usepackage{wrapfig}
+\usepackage{multicol}
+\usepackage{longtable}
+
+
+\begin{document}
+
+%TITLE PAGE
+
+\begin{titlepage}
+
+%LOGO
+
+{\begin{table}[t!]
+\centering
+\begin{tabu} to \textwidth { X[1.3,r,p] X[1.7,l,p] }
+\textcolor{Blue}
+{\textbf{\small{}}} & \includegraphics[scale=0.5]{Images/PolimiLogo}
+\end{tabu}
+\end{table}}~\\ [7cm]
+
+%TITLE 
+
+\begin{flushleft}
+
+%Replace the text string with your title
+{\textcolor{Blue}{\textbf{\Huge{DD: Design Document}}}} \\ [1cm]
+
+\end{flushleft}
+
+\end{titlepage}
+
+%Define deliverable specific info
+%Replace cell contents where needed
+\begin{table}[h!]
+\begin{tabu} to \textwidth { X[0.3,r,p] X[0.7,l,p] }
+\hline
+
+\textbf{Deliverable:} & DD\\
+\textbf{Title:} & Design Document \\
+\textbf{Authors:} & Alessandro Barbera, Nicolas Bolanos, Massimiliano Nuzzo \\
+\textbf{Version:} & 1.0 \\ 
+\textbf{Date:} & 7-January-2026 \\
+\textbf{Download page:} & https://github.com/nicolasbolanospolimi/BarberaBolanosNuzzo \\
+\textbf{Copyright:} & Copyright © 2026, Alessandro Barbera, Nicolas Bolanos, Massimiliano Nuzzo – All rights reserved \\
+\hline
+\end{tabu}
+\end{table}
+
+
+
+
+\setcounter{page}{2}
+
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\newpage
+\addcontentsline{toc}{section}{Table of Contents}
+\tableofcontents
+\newpage
+\addcontentsline{toc}{section}{List of Figures}
+\listoffigures
+\addcontentsline{toc}{section}{List of Tables}
+\listoftables
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\clearpage
+{\color{Blue}{\section{Introduction}}}
+\label{sect:introduction}
+\input{Files/introduction}
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\clearpage
+{\color{Blue}{\section{Architectural Design}}}
+\label{sect:Architectural Design}
+\input{DD/Files/architecturaldesign}
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\clearpage
+{\color{Blue}{\section{User Interface Design}}}
+\label{sect:User Interface Design}
+\input{DD/Files/userinterfacedesign}
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\clearpage
+{\color{Blue}{\section{Requirements Traceability}}}
+\label{sect:Requirements Traceability}
+\input{DD/Files/reqsrequirements}
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+
+\clearpage
+{\color{Blue}{\section{Implementation, Integration and Test Plan}}}
+\label{sect:Implementation, Integration and Test Plan}
+\input{DD/Files/implementationNDTestinbg}
+
+
+\clearpage
+{\color{Blue}{\section{Effort Spent}}}
+\label{sect:effort}
+\input{Files/effort}
+
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\clearpage
+\addcontentsline{toc}{section}{References}
+\bibliographystyle{plain}
+\bibliography{main}
+%------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+\end{document}

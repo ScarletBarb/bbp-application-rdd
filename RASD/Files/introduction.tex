@@ -1,0 +1,131 @@
+
+\subsection{Purpose}
+
+Cycling is not always the safest activity, the cyclist does not always have a dedicated infrastructure and sometimes must share among other road actors. Also, people are not always aware of the existence of paths, or roads that are in better condition than other when going from one place to another. In order to make biking a more efficient and safe, both as a sporting activity and mean of transport, Best Bike Paths (BBP) is created. 
+
+BBP aims to promote safer, more efficient, and enjoyable cycling by enabling users to discover and evaluate bike routes based on path conditions, obstacles, and user feedback. BBP supports active contribution and collaboration from cyclists, allowing them to record their trips, share path conditions, and confirm or correct automatically collected data, fostering a community-driven platform that keeps information current and reliable.
+
+BBP encourages sustainable urban mobility by motivating more people to cycle through improved route transparency and safety awareness. It also helps local authorities and communities by aggregating data to identify needed maintenance or hazards on bike paths, potentially contributing to better infrastructure planning and maintenance. 
+
+\subsubsection{Goals}
+\textbf{G1:} Users can register and have a profile in BBP application.\\
+\textbf{G2:} Users manually create bike paths in an inventory by specifying the name of the streets and the status.\\
+\textbf{G3:} Users create bike paths in an automated mode where the system acquire data from the user's mobile device and reconstruct the path.\\
+\textbf{G4:} Users browse bike paths within the inventory. They can specify an origin and destination and ask the system to visualize the bike path on a map. \\
+\textbf{G5:} Users record their trips and store them to keep track of their cycling activities.\\
+\textbf{G6:} Users can see for a recorded trip various statistical data of the user performances as well as meteorological information during the respective trip.\\
+\textbf{G7:} The system uses information published by the users about the paths by merging pieces of information to generate the optimal path, using the freshness and number of confirmed data.\\
+
+\subsection{Scope}
+
+The core goal is to help cyclists easily discover and evaluate paths based on user-contributed trip data, path conditions, and obstacles. BBP enables both registered and unregistered users to explore and access reliable data about cycling paths based on their quality, safety, and efficiency. 
+
+BBP allows users to contribute information about bike paths either manually or automatically. In manual mode, users enter data such as street names, surface conditions, and obstacles. In automatic mode, BBP leverages mobile device sensors, including GPS, accelerometers, and gyroscopes, to detect paths and irregularities during rides. The system filters these inputs for accuracy through user confirmation before making them public.
+
+BBP also aggregates and merges data from multiple contributors, giving preference to the most recent and widely confirmed information helping to keep the bike path inventory up-to-date and relevant for all users. 
+
+Also, registered users can record their individual trips, obtaining detailed statistics such as total distance, average speed, and travel duration. The system also integrates meteorological data from external services, enriching trip records with real-time weather conditions like temperature, wind speed, and precipitation.
+
+Ultimately, the system aims to enhance cycling safety, promote community engagement, sport activities on the bike, and support sustainable mobility by providing up-to-date, user-verified information about the best available bike paths. 
+
+%------------WORLD PHENOMENA---------------------
+\subsubsection{World Phenomena}
+
+\begin{enumerate}[label=\textbf{WP\arabic*:}]
+    \item Users ride bikes in paths. 
+    \item Users choose specific paths to ride.
+    \item Weather conditions affects visibility and riding performance of riders.
+    \item Physical obstacles on the path may be encountered, which may affect users by continuing the riding.
+    \item External services provides information about the weather forecasting.
+    \item Road go under maintenance in certain periods.
+    \item Road gets closed for certain events.
+    \item Road gets modified.
+    \item Road gets permanently closed.
+    \item Road deteriorates over time.
+\end{enumerate}
+%------------SHARED PHENOMENA---------------------
+\subsubsection{Shared Phenomena}
+\begin{enumerate}[label=\textbf{SP\arabic*:}]
+    \item (If automatic mode enabled) The system collects the information from the registered user traversing paths.
+    \item (If automatic mode enabled) Registered user confirms path information.
+    \item (If automatic mode disabled) Registered User provides path information manually.
+    \item User search for paths.
+    \item Registered user publishes a new path.
+    \item Registered user updates a road status.
+    \item (If automatic mode enabled) Registered user starts riding.
+    \item (If automatic mode enabled) Registered user stops riding.
+    \item Registered user enables automatic mode.
+    \item Registered user disables automatic mode.
+    \item Registered user start recording a trip.
+    \item Registered user stops recording a trip
+\end{enumerate}
+
+\subsection{Definitions, Acronyms, Abbreviations}
+
+\subsubsection{Definitions}
+
+\begin{itemize}
+    \item \textbf{Registered User}: A person who creates an account in the BBP system to access advanced features such as recording and publishing trips, adding or confirming path information, and contributing data either manually or automatically.
+    \item \textbf{Path}: A cycling route between a starting and finishing point recorded in the system. It consists of one or more streets or segments where bicycles can circulate under suitable conditions. Each path has associated information about its status, obstacles, and overall score. This score is computed based on the status of the path and on how effective the path is to let the user reach the destination from the given origin.
+    \item \textbf{Trip}: An individual cycling activity performed by a registered user. It includes data such as total distance, average speed, duration, and, when available, weather information related to the ride.
+    \item \textbf{External Service}: A data source outside the BBP system used to enrich trip information, particularly regarding weather conditions such as temperature, wind speed, and general climate.
+    \item \textbf{Automatic Mode}: A data insertion mode in which BBP automatically collects information from the user’s mobile device during the ride. It uses GPS, accelerometer, and gyroscope data to reconstruct the followed path and detect irregularities such as potholes, which the user must later confirm or correct.
+    \item \textbf{Manual Mode}: A data insertion mode in which the user manually inputs information about a path, specifying streets, path conditions, and any relevant obstacles or issues observed during the ride.
+\end{itemize}
+
+\subsubsection{Acronyms}
+
+\begin{itemize}
+    \item \textbf{BBP}: Best Bike Paths
+    \item \textbf{SDK}: Software Development Kit
+    \item \textbf{DBMS}: Database Management System
+    \item \textbf{GPS}: Global Positioning System
+    \item \textbf{WRS}: Weather Reporting System
+\end{itemize}
+
+\subsubsection{Abbreviations}
+
+\begin{itemize}
+    \item \textbf{G}: Goal
+    \item \textbf{WP}: World Phenomena
+    \item \textbf{SP}: Shared Phenomena
+
+\end{itemize}
+
+\subsection{Revision History}
+
+\begin{itemize}
+    \item 23/12/2025 - Version 1.0:
+        \begin{itemize}[label=+]
+            \item Added Section 1
+            \item Added Section 2
+            \item Added Section 3
+            \item Added Section 4
+        \end{itemize}
+    \item 07/01/2026 - Version 2.0
+        \begin{itemize}[label=+]
+            \item Updated Domain Class Diagram: added fields to Trip Class regarding longitude and latitude
+            \item Updated order of execution of Login: now we check before for the verification and later for the credentials
+            \item Changed functional requirement phrasing: now the path information in automated mode is not saved "locally"
+        \end{itemize}
+\end{itemize}
+
+\subsection{Reference Documents}
+
+The assignment for this document and all the information included refer to the following documentation:
+
+\begin{itemize}
+    \item The specification for the 2025/26 Requirement Engineering and Design Project for the Software Engineering II course.
+    \item The slides on the webeep page of the Software Engineering II course.
+\end{itemize}
+
+\subsection{Document Structure}
+
+\begin{enumerate}
+    \item \textbf{Introduction}: a brief description of the project that follows from the analysis of the specification provided, it highlights the goals of the product and its scope.
+    \item \textbf{Overall Description}: a more detailed description of the product that comprehends also real world scenarios and analyses the system from a technical point of view.
+    \item \textbf{Specific Requirements}: a detailed list of all the requirements needed in order to satisfy the goals, and their relationship with domain assumptions
+    \item \textbf{Formal analysis using Alloy}: a formal description of a portion of real world phenomena analyzed through Alloy in order to highlight inconsistencies between assumptions and phenomena previously modelized.
+    \item \textbf{Effort spent}: the time spent by each member of the group to contribute to the realization of this document.
+    \item \textbf{References}: reference to documents or tools used for writing this document.
+\end{enumerate}

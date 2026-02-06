@@ -1,0 +1,32 @@
+@startuml
+
+participant MobileApp as M
+
+activate M
+
+M -> M: checkSensorPermissions()
+
+alt permissions_not_granted
+M -> M: showPrompt(grant_sensor_access)
+alt user_grants_permission
+M -> M: check_sensors()
+alt sensor_error
+M -> M: showError(sensor_error)
+else else
+M -> M: activateAutomatedMode()
+M -> M: show(automatic_mode_enabled)
+end
+else else 
+M -> M: showError(sensor_permissions_denied)
+end
+else else 
+M -> M: check_sensors()
+alt sensor_error
+M -> M: showError(sensor_error)
+else else
+M -> M: activateAutomatedMode()
+M -> M: show(automatic_mode_enabled)
+end
+end
+deactivate M
+@enduml

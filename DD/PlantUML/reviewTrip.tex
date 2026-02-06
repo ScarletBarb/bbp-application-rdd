@@ -1,0 +1,65 @@
+@startuml
+
+participant MobileApp as M
+participant APIGateway as API
+participant TripService as TS
+participant TripDB as TDB
+participant MapAPI as Map
+
+activate M
+M -> API: getTrips(user_id)
+activate API
+API -> TS: getTrips(user_id)
+activate TS
+TS -> TDB: getTripsForUser(user_id)
+activate TDB
+alt no_registered_trips
+TDB --> TS: NONE
+TS --> API: NO_TRIPS_FOR_USER
+API --> M: NO_TRIPS_FOR_USER
+M -> M: show(NO_TRIPS_FOR_USER)
+else else
+TDB --> TS: [TRIPS]
+deactivate TDB
+TS --> API: [TRIPS]
+deactivate TS
+API --> M: [TRIPS]
+deactivate API
+M -> M: showTrips([TRIPS])
+deactivate M
+== Select trip ==
+M -> API: getTrip(trip_id)
+activate M
+activate API
+API -> TS: getTrip(trip_id)
+activate TS
+TS -> TDB: getTrip(trip_id)
+activate TDB
+alt error_fetching
+TDB --> TS: ERROR
+TS --> API: error(data_retrieval_failed)
+API --> M: error(data_retrieval_failed)
+M -> M: showError(data_retrieval_failed)
+else else 
+TDB --> TS: TRIP_INFO
+deactivate TDB
+TS --> API: TRIP_INFO
+deactivate TS
+API --> M: TRIP_INFO
+deactivate API
+M -> Map: GMSMapViewOptions()
+activate Map
+Map --> M: MAP_OPTIONS
+deactivate Map
+M -> M: aggregateMapOptions(MAP_OPTIONS, trip_info)
+M -> Map: GMSMapView(MapOptionsWithTripInfo)
+activate Map
+Map --> M: MAP_VIEW
+deactivate Map
+M -> M: showMap(MAP_VIEW)
+M -> M: showTripDetail(TRIP_INFO) 
+end
+end
+deactivate M
+@enduml
+

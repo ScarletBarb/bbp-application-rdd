@@ -1,0 +1,35 @@
+@startuml
+
+participant MobileApp as M
+participant IdP
+
+activate M
+M -> M: validateInput(email, password)
+
+alt invalid_input
+M -> M: show_error(invalidInput)
+else else
+M -> IdP: signIn(email, password)
+activate IdP
+IdP -> IdP: checkEmailStatus(email)
+alt email_not_verified
+IdP --> M: error(email_not verified)
+M -> M: show_error(email_not_verified)
+else email_not_exists
+IdP --> M: error(email_not_exists)
+M -> M: show_error(email_not_exists)
+else else
+IdP -> IdP: checkCredentials(email, password)
+alt invalid_credentials
+IdP --> M: error(email_or_password_incorrect)
+M -> M: show_error(email_or_password_incorrect)
+else else
+IdP -> IdP: GenerateSessionTokens()
+IdP --> M: SESSION_TOKENS
+deactivate IdP
+end
+end
+deactivate M
+
+
+@enduml

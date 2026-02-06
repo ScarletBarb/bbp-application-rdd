@@ -1,0 +1,50 @@
+@startuml
+
+participant MobileApp as M
+participant APIGateway as API
+participant PathService as PS
+participant PathDB as PDB
+participant MapAPI as Map
+
+activate M
+M -> API: searchPaths(origin, destination)
+activate API
+API -> PS: searchPaths(origin, destination)
+activate PS
+PS -> PDB: pathsBetween(origin, destination)
+activate PDB
+alt no_valid_path
+PDB --> PS: NO_RESULTS
+PS --> API: PATH_NOT_FOUND
+API --> M: PATH_NOT_FOUND
+M -> M: show(path_not_found)
+else data_retrieval_failed
+PDB --> PS: ERROR
+PS --> API: error(data_retrieval_failed)
+API --> M: error(data_retrieval_failed)
+M -> M: showError(data_retrieval_failed)
+else else
+PDB --> PS: PATHS
+deactivate PDB
+PS -> PS: sortPaths(PATHS, DESC)
+PS --> API: SORTED_PATHS
+deactivate PS
+API --> M: SORTED_PATHS
+loop for_each_path
+M -> Map: GMSMapViewOptions()
+activate Map
+Map --> M: MAP_OPTIONS
+deactivate Map
+M -> M: aggregateMapOptions(MAP_OPTIONS, path_info)
+M -> Map: GMSMapView(MapOptionsWithPathInfo)
+activate Map
+Map --> M: MAP_VIEW
+deactivate Map
+M -> M: showMap(MAP_VIEW)
+end
+deactivate API
+end
+deactivate M
+
+
+@enduml

@@ -1,0 +1,34 @@
+### Reference file
+
+
+@startuml
+actor "Registered User" as User
+participant "System" as Sys
+
+activate User
+
+
+== Disable automated mode ==
+User -> User: click_on(toggle_automated_mode)
+
+User -> Sys: request_disable_automated_mode()
+activate Sys
+
+== Stop collecting data ==
+
+alt trip_or_path_recording_in_progress (E1)
+    Sys -> Sys: stop_trip() | stop_path_recording()
+end
+
+alt gps_or_sensor_error (E2)
+    Sys --> User: show(error_sensor)
+else else
+    Sys -> Sys: deactivate(automated_mode)
+    Sys --> User: notify(automatic_mode_disabled)
+end
+
+
+deactivate Sys
+deactivate User
+
+@enduml

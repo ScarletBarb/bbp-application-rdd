@@ -1,0 +1,41 @@
+###Reference file
+
+@startuml
+actor "Registered User" as User
+participant "System" as Sys
+
+activate User
+
+== Open platform ==
+User -> Sys: get(login_page)
+activate Sys
+Sys --> User: show(login_form(email, password))
+deactivate Sys
+
+== Fill login form ==
+User -> User: fill(login_form(email, password))
+
+User -> User: click_on(sign_in)
+
+User -> Sys: submit(login_form(email, password))
+activate Sys
+
+== Validate credentials ==
+Sys -> Sys: check_credentials(email, password)
+
+alt invalid_credentials (E1)
+    Sys --> User: show(error_invalid_email_or_password)
+else else
+    Sys -> Sys: check_email_verified(email)
+    alt email_not_verified (E2)
+        Sys --> User: show(error_email_not_verified)
+    else else
+        Sys -> Sys: create_session_for_user(email)
+        Sys --> User: show(home_page_logged_in)
+    end
+end
+
+deactivate Sys
+deactivate User
+
+@enduml

@@ -1,0 +1,51 @@
+### Reference file
+
+@startuml
+actor "Registered User" as User
+participant "System" as Sys
+
+activate User
+
+== Start ride with automated mode ==
+User -> User: start bike ride
+
+== Automated recording ==
+Sys -> Sys: start_path_recording()
+loop while recording
+   alt user stops biking
+       User -> User: stop bike ride
+       Sys -> Sys: stop_recording()
+   else else
+      alt gps_or_sensor_unavailable (E1)
+         Sys -> User: show(error_sensor_unavailable)
+         Sys -> Sys: stop_recording()
+      else else
+         Sys -> Sys: record_data(gps, accelerometer, gyroscope)
+         Sys -> Sys: store_detected_obstacles()
+      end
+   end
+end
+
+
+== Save path information ==
+Sys -> Sys: save_bike_path_information()
+alt error_saving_data (E2)
+    loop while_not_saved
+       Sys -> Sys: save_bike_path_information()
+    end
+else else
+    Sys -> Sys: mark_path_ready_for_review()
+end
+
+== Crash handling ==
+... if application_crashes_during_recording (E3) ...
+Sys -> Sys: stop_recording_on_crash()
+User -> Sys: reboot_application()
+Sys -> Sys: treat_recording_as_ended_normally()
+
+== Notify user ==
+Sys --> User: notify(new_path_recorded_and_ready_for_review)
+
+deactivate User
+
+@enduml

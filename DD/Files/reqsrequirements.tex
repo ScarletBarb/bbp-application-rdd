@@ -1,0 +1,539 @@
+\subsection{Sign up process}
+\begin{table}[ht]
+\begin{tabular}{|p{9cm}|p{6cm}|}
+\hline
+\textbf{Requirements}      & \multicolumn{1}{l|}{\textbf{Components}}\\ \hline
+R1: The system must allow users to register using a username, an email and a password. 
+&
+User Service Component: 
+\begin{itemize}
+  \item User Account Manager
+  \item User Authenticator Manager
+\end{itemize}
+API Gateway
+\newline
+Identity Provider
+\newline
+Mobile Application Component
+\newline
+User Database
+\newline
+Email Delivery Service
+\\ \hline
+R2: The system must verify that credentials are unique.   
+&
+User Service Component: 
+\begin{itemize}
+  \item User Account Manager
+  \item User Authenticator Manager
+\end{itemize}
+API Gateway
+\newline
+Identity Provider
+\newline
+Mobile Application Component
+\newline
+User Database
+\\ \hline
+R3: The system must send a verification email to the user. 
+&
+User Service Component: 
+\begin{itemize}
+  \item User Account Manager
+  \item User Authenticator Manager
+\end{itemize}
+Mobile Application Component
+\newline
+API Gateway
+\newline
+Email Delivery Service
+\newline
+Identity Provider
+\\ \hline
+R4: The system must let people verify their email after receiving the verification request. 
+&
+User Service Component:  
+\begin{itemize}
+  \item User Account Manager
+  \item User Authenticator Manager
+\end{itemize}
+Email Delivery Service
+\newline
+Identity Provider
+\\ \hline
+R5: The system must activate accounts only if verified. 
+&
+User Service Component: 
+\begin{itemize}
+  \item User Account Manager
+  \item User Authenticator Manager
+\end{itemize}
+User Database
+\newline
+Identity Provider
+\\ \hline
+\end{tabular}
+\end{table}
+\newpage
+\subsection{Login and Logout}
+\begin{table}[ht]
+\begin{tabular}{|p{9cm}|p{6cm}|}
+\hline
+\textbf{Requirements}      & \multicolumn{1}{l|}{\textbf{Components}}\\ \hline
+R6: The system must allow registered users to log in using email and password. 
+&
+Mobile Application Component
+\newline
+Identity Provider
+\\ 
+\hline
+R7: The system must verify the correctness of the credentials  
+&
+Mobile Application Component
+\newline
+Identity Provider
+\\ \hline
+R8: The system must allow registered users to log in only if the credentials are correct. 
+&
+Mobile Application Component
+\newline
+Identity Provider
+\\ \hline
+R9: The system must allow registered users, that logged-in, to log out. 
+&
+Mobile Application Component
+\newline
+Identity Provider
+\\ \hline
+R10: The system must delete user’s session 
+&
+User Service Component:
+\begin{itemize}
+    \item User Account Manager
+\end{itemize}
+Identity Provider
+\newline
+Mobile Application Component
+\\ \hline
+R11: The system must allow only registered users to record trips and submit new bike path information. 
+&
+Trip Service Component:
+\begin{itemize}
+    \item Trip Recorded Manager
+\end{itemize}
+Mobile Application Component
+\newline
+API Gateway
+
+\\ \hline
+R12: The system must allow every user to access the system to browse paths. 
+&
+User Service Component:
+\begin{itemize}
+    \item User Account Manager
+\end{itemize}
+Path Service Component:
+\begin{itemize}
+    \item Path Search Engine
+        \begin{itemize}
+            \item Best Path Finder
+            \item Information Merger
+            \newline
+        \end{itemize}
+\end{itemize}
+Mobile Application Component
+\newline
+API Gateway
+
+\\ \hline
+\end{tabular}
+\end{table}
+\newpage
+\subsection{Permissions}
+\begin{table}[ht]
+\begin{tabular}{|p{9cm}|p{6cm}|}
+\hline
+\textbf{Requirements}      & \multicolumn{1}{l|}{\textbf{Components}}\\ \hline
+R13: The system must ask registered users to give permissions for the sensors. 
+&
+Mobile Application Component
+\\ \hline
+R14: The system must read the sensors data only if the permissions are given by the registered user.  
+&
+Mobile Application Component
+\\ \hline
+\end{tabular}
+\end{table}
+\newpage
+\subsection{Trip Management}
+\begin{table}[ht]
+\begin{tabular}{|p{9cm}|p{6cm}|}
+\hline
+\textbf{Requirements}      & \multicolumn{1}{l|}{\textbf{Components}}\\ \hline
+R15: The system must allow registered users to record their bike trips. 
+&
+Trip Service Component:
+\begin{itemize}
+    \item Trip Recorded Manager
+\end{itemize}
+Mobile Application Component
+\newline
+API Gateway
+\newline
+Trip Database
+\\ \hline
+R16: The system must use sensors to track the biker’s trip and their performance metrics.  
+&
+Mobile Application Component
+\\ \hline
+R17: The system must allow the registered user to save the trip recorded. 
+&
+Trip Service Component:
+\begin{itemize}
+    \item Trip Recorded Manager
+\end{itemize}
+Mobile Application Component
+\newline
+API Gateway
+\newline
+Trip Database
+\\ \hline
+R18: The system must check the availability of the Weather Reporting Service (WRS) before requesting data. 
+&
+Trip Service Component
+\begin{itemize}
+    \item Weather Information Querier
+    \item Trip Recording Manager
+\end{itemize}
+Weather Report Service
+\\ \hline
+R19: The system must ask the WRS for weather information regarding the trip considered. 
+&
+Trip Service Component
+\begin{itemize}
+    \item Weather Information Querier
+    \item Trip Recording Manager
+\end{itemize}
+Weather Report Service
+\\ \hline
+\end{tabular}
+\end{table}
+\newpage
+\begin{table}[ht]
+\begin{tabular}{|p{9cm}|p{6cm}|}
+\hline
+\textbf{Requirements}      & \multicolumn{1}{l|}{\textbf{Components}}\\ \hline
+R20: The system must attach weather information to the trip entry, if available. 
+&
+Trip Service Component
+\begin{itemize}
+    \item Weather Information Querier
+    \item Trip Recording Manager
+\end{itemize}
+Weather Report Service
+\newline
+Trip Database
+\\ \hline
+R21: The system must show registered users a list of their recorded trips. 
+&
+Trip Service Component
+\begin{itemize}
+    \item Recorded Trip Manager
+\end{itemize}
+API Gateway
+\newline
+Mobile Application Component
+\newline
+Trip Database Server
+\\ \hline
+R22: The system must allow registered users to see details of a specified recorded trip.
+&
+Trip Service Component
+\begin{itemize}
+    \item Recorded Trip Manager
+\end{itemize}
+Mobile Application Component
+\newline
+API Gateway
+\newline
+Trip Database Server
+\\ \hline
+\end{tabular}
+\end{table}
+
+\newpage
+\subsection{Bike Path Management- Manual mode}
+\begin{table}[ht]
+\begin{tabular}{|p{9cm}|p{6cm}|}
+\hline
+\textbf{Requirements}      & \multicolumn{1}{l|}{\textbf{Components}}\\ \hline
+R23: The system must allow registered users to manually insert path information using a form.
+&
+Mobile Application Component
+\\ \hline
+R24: The system must require the user to specify roads and intersections in the path.  
+&
+Mobile Application Component
+\newline
+Google Maps SDK
+\\ \hline
+R25: The system must allow registered users to specify the condition of each road in the path. 
+&
+Mobile Application Component
+\\ \hline
+R26: The system must allow registered users to report additional issues (f.e. potholes). 
+&
+Path Service Component:
+\begin{itemize}
+    \item Path Recording Manager
+\end{itemize}
+API Gateway
+\newline
+Mobile Application Component
+\\ \hline
+R27: The system must save the path information in the central database. 
+&
+Path Service Component:
+\begin{itemize}
+    \item Path Recording Manager
+\end{itemize}
+Path Database
+\newline
+Mobile Application Component 
+\newline
+API Gateway
+\\ \hline
+\end{tabular}
+\end{table}
+\newpage
+\subsection{Bike Path Management- Automated mode}
+\begin{table}[ht]
+\begin{tabular}{|p{9cm}|p{6cm}|}
+\hline
+\textbf{Requirements}      & \multicolumn{1}{l|}{\textbf{Components}}\\ \hline
+R28: The system must let registered users enable automated mode. 
+&
+Mobile Application Component
+\\ \hline
+R29: The system must let registered users disable automated mode.  
+&
+Mobile Application Component
+\\ \hline
+R30: The system must let registered users add path information via automated mode 
+&
+Mobile Application Component
+\\ \hline
+R31: The system must record data using sensors only if automated mode is enabled. 
+&
+Mobile Application Component
+\\ \hline
+R32: The system must recognize if the registered user is biking. 
+&
+Mobile Application Component
+\\ \hline
+\end{tabular}
+\end{table}
+\newpage
+\begin{table}[ht]
+\begin{tabular}{|p{9cm}|p{6cm}|}
+\hline
+\textbf{Requirements}      & \multicolumn{1}{l|}{\textbf{Components}}\\ \hline
+R33: The system must start recording the path only if the system recognizes that the registered user is biking. 
+&
+Mobile Application Component
+\\ \hline
+R34: The system must use the sensors’ data to record the path. 
+&
+Mobile Application Component
+\\ \hline
+R35: The system must record intersections and road crossed by the registered user.
+&
+Mobile Application Component
+\newline
+Google Maps SDK
+\\ \hline
+R36: The system must recognize obstacles in the path (f.e. pothole) using sensors’ data. 
+&
+Mobile Application Component
+\newline
+Google Maps SDK
+\\ \hline
+R37: The system must recognize if the registered user stopped biking.  
+&
+Mobile Application Component
+\\ \hline
+R38: The system must stop recording the path if the system recognizes that the registered user stopped biking. 
+&
+Mobile Application Component
+\\ \hline
+\end{tabular}
+\end{table}
+\newpage
+\begin{table}[ht]
+\begin{tabular}{|p{9cm}|p{6cm}|}
+\hline
+\textbf{Requirements}      & \multicolumn{1}{l|}{\textbf{Components}}\\ \hline
+R39: The system must save the recorded bike path information in "to be reviewed" state after an automated mode recording. 
+&
+Path Service Component:
+\begin{itemize}
+    \item Path Recording Manager
+\end{itemize}
+API Gateway
+\newline
+Mobile Application Component
+\\ \hline
+R40: The system must notify the user that a path has been recorded this way. 
+&
+Path Service Component:
+\begin{itemize}
+    \item Path Recording Manager
+\end{itemize}
+API Gateway
+\newline
+Mobile Application Component
+\\ \hline
+R41: The system must require registered users to review and edit information collected via automated mode before publishing. 
+&
+User Service Component:
+\begin{itemize}
+    \item User Account Manager
+\end{itemize}
+Path Service Component:
+\begin{itemize}
+    \item Path Recording Manager
+\end{itemize}
+Mobile Application Component
+\\ \hline
+R42: The system must allow registered users to discard the information collected via automated mode. 
+&
+Path Service Component:
+\begin{itemize}
+    \item Path Recording Manager
+\end{itemize}
+API Gateway
+\newline
+Path Database
+\newline
+Mobile Application Component
+\\ \hline
+R43: The system must allow registered users to save and publish the information recorded via automated mode.
+&
+Path Service Component:
+\begin{itemize}
+    \item Path Recording Manager
+\end{itemize}
+API Gateway
+\newline
+Path Database
+\newline
+Mobile Application Component
+\\ \hline
+\end{tabular}
+\end{table}
+\newpage
+\subsection{Finding the Best Path}
+\begin{table}[ht]
+\begin{tabular}{|p{9cm}|p{6cm}|}
+\hline
+\textbf{Requirements}      & \multicolumn{1}{l|}{\textbf{Components}}\\ \hline
+R44: The system must allow every user, regardless of their registration status, to browse for paths.
+&
+Path Service Component:
+\begin{itemize}
+    \item Path Search Engine
+        \begin{itemize}
+            \item Best Path Finder
+            \item Information Merger
+        \end{itemize}
+\end{itemize}
+Mobile Application Component
+\newline
+API Gateway
+\newline
+Path Database
+\\ \hline
+R45: The system must allow the user to fill up a form regarding an origin and destination point.  
+&
+Mobile Application Component
+\\ \hline
+R46: The system must compute the best path(s) considering the specified points. 
+&
+Path Service Component:
+\begin{itemize}
+    \item Path Search Engine
+        \begin{itemize}
+            \item Best Path Finder
+            \item Information Merger
+            \newline
+        \end{itemize}
+\end{itemize}
+\\ \hline
+R47: The system must merge information from multiple users regarding a road, considering freshness of information and number of confirming users. 
+&
+Path Service Component:
+\begin{itemize}
+    \item Path Search Engine
+        \begin{itemize}
+            \item Best Path Finder
+            \item Information Merger
+        \end{itemize}
+\end{itemize}
+Path Database
+\\ \hline
+R48: The system must compute an average status for the specified path. 
+&
+Path Service Component:
+\begin{itemize}
+    \item Path Search Engine
+        \begin{itemize}
+            \item Best Path Finder
+            \item Information Merger
+            \newline
+        \end{itemize}
+\end{itemize}
+\\ \hline
+\end{tabular}
+\end{table}
+\newpage
+\begin{table}[ht]
+\begin{tabular}{|p{9cm}|p{6cm}|}
+\hline
+\textbf{Requirements}      & \multicolumn{1}{l|}{\textbf{Components}}\\ \hline
+R49: The system must compute a score for the specified path, considering their status and the easy reachability. 
+&
+Path Service Component:
+\begin{itemize}
+    \item Path Search Engine
+        \begin{itemize}
+            \item Best Path Finder
+            \item Information Merger
+            \newline
+        \end{itemize}
+\end{itemize}
+\\ \hline
+R50: The system must show the user all the possible best paths in descendant score order, with their scores and
+metrics. 
+&
+Path Service Component:
+\begin{itemize}
+    \item Path Search Engine
+        \begin{itemize}
+            \item Best Path Finder
+            \item Information Merger
+        \end{itemize}
+\end{itemize}
+Mobile Application Component
+\newline
+API Gateway
+\newline
+Path Database
+\\ \hline
+R51: The system must show the user a map of the best path(s). 
+&
+Mobile Application Component
+\newline
+Google SDK Maps 
+\\ \hline
+\end{tabular}
+\end{table}

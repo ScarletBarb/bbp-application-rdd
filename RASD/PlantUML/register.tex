@@ -1,0 +1,65 @@
+### Reference file for code
+
+@startuml
+actor User
+participant "System" as Sys
+
+activate User
+== Open registration ==
+
+
+User -> Sys: get(login_page)
+activate Sys
+Sys --> User: show(login_page)
+deactivate Sys
+
+
+User -> User: click_on(register)
+
+User -> Sys: get(register_page)
+activate Sys
+Sys --> User: show(register_form)
+deactivate Sys
+
+== Submit registration ==
+User -> User: fill(register_form)
+
+User -> User: click_on(confirm_register_form)
+
+User -> Sys: submit(register_form(username, email, password))
+
+activate Sys
+Sys -> Sys: validate_input(username, email, password)
+Sys -> Sys: check_username_not_exists(username)
+alt username_exists (E2)
+    Sys --> User: show(error_username_exists)
+else else
+    Sys -> Sys: check_email_not_exists(email)
+    alt email_exists (E3)
+        Sys --> User: show(error_email_exists_or_login)
+    else else
+        Sys -> Sys: create_pending_user(username, email, password)
+        Sys -> Sys: send_verification_email(email)
+        alt email_delivery_failed (E1)
+            Sys -> Sys: retry_send_verification_email(email)
+            Sys --> User: show(error_email_cannot_be_delivered)
+        else else
+            Sys --> User: show(message_check_email_for_verification)
+        end
+    end
+end
+
+deactivate Sys
+
+== Email verification ==
+User -> Sys: verify_email(token)
+activate Sys
+Sys -> Sys: validate_token(token)
+Sys -> Sys: activate_user(token)
+Sys --> User: show(registration_success_page)
+deactivate Sys
+
+deactivate User
+
+@enduml
+

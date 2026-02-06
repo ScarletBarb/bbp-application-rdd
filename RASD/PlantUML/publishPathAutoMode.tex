@@ -1,0 +1,52 @@
+### Reference file
+
+
+@startuml
+actor "Registered User" as User
+participant "System" as Sys
+
+activate User
+
+== Notify new path ==
+Sys --> User: notify(new_path_recorded_ready_for_review)
+
+== Access recorded path ==
+alt from_notification
+    User -> User: tap notification
+else from_app
+    User -> User: open_application
+    User -> User: navigate_to(recorded_path_detail)
+end
+
+User -> Sys: get(recorded_path_detail_page)
+activate Sys
+Sys --> User: show(recorded_path_detail)
+deactivate Sys
+
+== Review / edit path ==
+User -> User: review(path_information) | edit(path_information)
+
+alt user_deletes_recording (E1)
+    User -> User: click_on(delete_recording)
+    User -> Sys: delete_recording(path_id)
+    activate Sys
+    Sys -> Sys: delete_recording(path_id)
+    Sys --> User: notify(path_discarded)
+    deactivate Sys
+else saves_and_publishes
+    User -> User: click_on(save_and_publish)
+    User -> Sys: request_save_and_publish(path_id, path_information)
+    activate Sys
+    Sys -> Sys: save_path(path_id, path_information)
+    alt error_saving_data (E2)
+        loop while_not_saved
+           Sys -> Sys: save_path(path_id, path_information)
+        end
+    end
+    Sys --> User: notify(path_published)
+    deactivate Sys
+end
+
+deactivate User
+
+@enduml

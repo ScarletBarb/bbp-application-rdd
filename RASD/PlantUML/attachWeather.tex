@@ -1,0 +1,42 @@
+### Reference file
+
+
+@startuml
+participant "System" as Sys
+participant "Weather Reporting System (WRS)" as WRS
+
+== Trigger attach weather information ==
+Sys -> Sys: new_trip
+activate Sys
+
+
+== Check WRS availability ==
+Sys -> WRS: check_availability()
+activate WRS
+
+alt wrs_not_available (E1)
+    WRS --> Sys: availability(false) | no_response
+    deactivate WRS
+    Sys -> Sys: finish
+else wrs_available
+    WRS --> Sys: availability(true)
+
+    == Request contextual weather data ==
+    activate WRS
+    Sys -> WRS: get_weather(time_interval, location)
+
+    alt weather_data_not_available (E2)
+        WRS --> Sys: weather_data(null)| no_response
+        deactivate WRS
+        Sys -> Sys: finish
+    else weather_data_available
+        WRS --> Sys: weather_data(wind_speed, temperature, conditions)
+        deactivate WRS
+
+        == Attach weather to trip ==
+        Sys -> Sys: save_weather_to_trip(trip_id, wind_speed, temperature, conditions)
+        
+    end
+end
+deactivate Sys
+@enduml

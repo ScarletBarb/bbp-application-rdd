@@ -1,0 +1,74 @@
+@startuml
+
+participant MobileApp as M
+participant APIGateway as API
+participant UserService as US
+participant IdP
+participant UserDB as UDB
+participant EmailDeliveryService as E
+
+activate M
+M -> M: validateInput(username, email, password)
+
+alt invalid_input
+M -> M: show_error(invalidInput)
+else else
+M -> API: signUp(username, email, password)
+activate API
+API -> US: signUp(username, email, password)
+activate US
+US -> UDB: get(email)
+activate UDB
+alt email_already_exists
+UDB --> US: email
+US --> API: error(email_exists)
+API --> M: error(email_exits)
+M -> M: show_error(email_exists)
+else else
+UDB --> US: no_result
+deactivate UDB
+US -> UDB: insertUser(username, email, STAUTS_NOT_VERIFIED)
+activate UDB
+UDB --> US: OK
+deactivate UDB
+US -> IdP: createUser(username, email, password)
+activate IdP
+IdP --> US: OK
+deactivate IdP
+US -> E: send_confirmation_mail(email)
+activate E
+alt email_delivery_failure
+E --> US: ERROR
+US--> API: error(error_sending_email)
+API --> M: error(error_sending_email)
+M -> M: show_error(error_sending_email)
+else else
+E --> US: OK
+deactivate E
+US --> API: OK
+deactivate US
+API -> M: OK
+deactivate API
+M -> M: show(creation_succesful_confirm_mail)
+deactivate M
+end 
+end
+end
+
+== Email verification ==
+
+
+US -> US: recieved_confirmation()
+activate US
+US -> UDB: updateUser(email, STATUS_VERIFIED)
+activate UDB
+UDB --> US: OK
+deactivate UDB
+US -> IdP: confirmUser(email)
+activate IdP
+IdP --> US: OK
+deactivate IdP
+deactivate US
+
+
+@enduml

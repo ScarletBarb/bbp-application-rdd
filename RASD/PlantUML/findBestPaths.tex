@@ -1,0 +1,51 @@
+### Reference file 
+
+@startuml
+actor User
+participant "System" as Sys
+
+activate User
+
+== Entry ==
+User -> Sys: get(home_page)
+activate Sys
+Sys --> User: show(home_page)
+deactivate Sys
+
+== Start search ==
+User -> User: click_on(go_to_search | find_best_paths | search_nav)
+
+User -> Sys: get(search_page)
+activate Sys
+Sys --> User: show(search_form(origin, destination))
+deactivate Sys
+
+== Fill search form ==
+User -> User: fill(search_form(origin, destination))
+
+User -> User: click_on(find_routes)
+
+User -> Sys: submit(search_form(origin, destination))
+activate Sys
+
+Sys -> Sys: validate_points(origin, destination)
+
+== Compute paths ==
+Sys -> Sys: retrieve_path_data(origin, destination)
+alt no_valid_path (E1)
+    Sys --> User: show(blank_page_with_message_no_paths)
+else else
+    Sys -> Sys: compute_path_composition_status(origin, destination)
+    Sys -> Sys: compute_paths_and_scores(origin, destination)
+    alt data_retrieval_failed (E2)
+        Sys -> Sys: retry_retrieve_path_data(origin, destination)
+        Sys --> User: show(error_try_again_later)
+    else else
+        Sys --> User: show(recommended_paths_with_scores_and_details)
+    end
+end
+
+deactivate Sys
+deactivate User
+
+@enduml
